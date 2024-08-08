@@ -5,7 +5,7 @@ import Colors from "./folderKeyboard/Colors&Size";
 
 const lastActions = [];
 
-let arrChars = [];
+
 
 function AppKeyboard() {
   const hebrewLetters = [
@@ -157,6 +157,7 @@ function AppKeyboard() {
     "🚀",
   ];
 
+  const numbers=["1","2","3",'4',"5","6","7","8","9",0];
   const [board, setBoard] = useState(hebrewLetters);
   const [text, setText] = useState("");
   const [styledText, setStyledText] = useState([]);
@@ -171,7 +172,7 @@ function AppKeyboard() {
       <span style={{ color: fondColor }}>{event.target.textContent}</span>
     );
     setStyledText([...styledText, char]);
-    console.log(styledText);
+    console.log("->",styledText);
   }
 
   function changeColorForAll() {
@@ -230,6 +231,14 @@ function AppKeyboard() {
           Chars
         </button>
         <button
+          className="butCharacters"
+          onClick={() => {
+            setBoard(numbers);
+          }}
+        >
+          Numbers
+        </button>
+        <button
           className="butEmojis"
           onClick={() => {
             setBoard(emojis);
@@ -267,8 +276,7 @@ function AppKeyboard() {
         <button
           className="delete"
           onClick={() => {
-            setText(" ");
-            arrChars = [];
+            setStyledText([]);
           }}
         >
           Delete
@@ -276,7 +284,7 @@ function AppKeyboard() {
         <button
           className="deleteChar"
           onClick={() => {
-            setText(text.slice(0, -1));
+            setStyledText(styledText.slice(0, -1));
           }}
         >
           Delete char
@@ -303,7 +311,11 @@ function AppKeyboard() {
         <button
           className="lowerCase"
           onClick={() => {
-            setText(text.toLowerCase());
+            setStyledText(styledText.map((item, index) => (
+              <span key={index} style={item.props.style}>
+                {item.props.children.toLowerCase()}
+              </span>
+            )));
           }}
         >
           Lower case
@@ -311,7 +323,11 @@ function AppKeyboard() {
         <button
           className="upperCase"
           onClick={() => {
-            setText(text.toUpperCase());
+            setStyledText(styledText.map((item, index) => (
+              <span key={index} style={item.props.style}>
+                {item.props.children.toUpperCase()}
+              </span>
+            )))
           }}
         >
           Upper case
@@ -321,12 +337,7 @@ function AppKeyboard() {
       <Colors
         setText={setText}
         setFondSize={setFondSize}
-        setFondColor={(color) => {
-          setFondColor(color);
-          if (applyColorToAll) {
-            setTimeout(changeColorForAll, 0);
-          }
-        }}
+        setFondColor={setFondColor}
         text={text}
         color={fondColor}
         size={fondSize}
