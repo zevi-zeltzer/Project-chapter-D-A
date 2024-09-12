@@ -5,8 +5,6 @@ import Colors from "./folderKeyboard/Colors&Size";
 
 const lastActions = [];
 
-
-
 function AppKeyboard() {
   const hebrewLetters = [
     "א",
@@ -157,9 +155,10 @@ function AppKeyboard() {
     "🚀",
   ];
 
-  const numbers=["1","2","3",'4',"5","6","7","8","9",0];
+  const numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9", 0];
+
+  
   const [board, setBoard] = useState(hebrewLetters);
-  const [text, setText] = useState("");
   const [styledText, setStyledText] = useState([]);
   const [applyColorToAll, setApplyColorToAll] = useState(false);
   const [fondColor, setFondColor] = useState("black");
@@ -167,12 +166,22 @@ function AppKeyboard() {
   const [dir, setDir] = useState("rtl");
 
   function addText(event) {
-    lastActions.push({ text: text, color: fondColor, size: fondSize });
+    lastActions.push({  styledText: [...styledText], color: fondColor, size: fondSize });
     const char = (
       <span style={{ color: fondColor }}>{event.target.textContent}</span>
     );
     setStyledText([...styledText, char]);
-    console.log("->",styledText);
+    console.log("->", styledText);
+  }
+
+  function addSpace() {
+    lastActions.push({  styledText: [...styledText], color: fondColor, size: fondSize });
+    const space = (
+      <span key={styledText.length} style={{ color: fondColor }}>
+        &nbsp;
+      </span>
+    );
+    setStyledText([...styledText, space]);
   }
 
   function changeColorForAll() {
@@ -185,7 +194,7 @@ function AppKeyboard() {
   }
 
   function setLestAction() {
-    setText(lastActions[lastActions.length - 1].text);
+    setStyledText(lastActions[lastActions.length - 1].styledText);
     setFondColor(lastActions[lastActions.length - 1].color);
     setFondSize(lastActions[lastActions.length - 1].size);
     lastActions.pop();
@@ -265,7 +274,7 @@ function AppKeyboard() {
           <button
             className="profit"
             onClick={() => {
-              setText(text + " ");
+              addSpace();
             }}
           >
             Space
@@ -311,11 +320,13 @@ function AppKeyboard() {
         <button
           className="lowerCase"
           onClick={() => {
-            setStyledText(styledText.map((item, index) => (
-              <span key={index} style={item.props.style}>
-                {item.props.children.toLowerCase()}
-              </span>
-            )));
+            setStyledText(
+              styledText.map((item, index) => (
+                <span key={index} style={item.props.style}>
+                  {item.props.children.toLowerCase()}
+                </span>
+              ))
+            );
           }}
         >
           Lower case
@@ -323,11 +334,13 @@ function AppKeyboard() {
         <button
           className="upperCase"
           onClick={() => {
-            setStyledText(styledText.map((item, index) => (
-              <span key={index} style={item.props.style}>
-                {item.props.children.toUpperCase()}
-              </span>
-            )))
+            setStyledText(
+              styledText.map((item, index) => (
+                <span key={index} style={item.props.style}>
+                  {item.props.children.toUpperCase()}
+                </span>
+              ))
+            );
           }}
         >
           Upper case
@@ -335,10 +348,12 @@ function AppKeyboard() {
       </div>
 
       <Colors
-        setText={setText}
+        
         setFondSize={setFondSize}
         setFondColor={setFondColor}
-        text={text}
+        
+        styledText={styledText}
+        setStyledText={setStyledText}
         color={fondColor}
         size={fondSize}
         applyColorToAll={applyColorToAll}

@@ -21,7 +21,7 @@ function Colors(props) {
               className={color}
               onClick={() => {
                 lastActions.push({
-                  text: props.text,
+                  styledText: [...props.styledText],
                   color: props.color,
                   size: props.size,
                 });
@@ -49,7 +49,7 @@ function Colors(props) {
               className={`but${size}`}
               onClick={() => {
                 lastActions.push({
-                  text: props.text,
+                  styledText: [...props.styledText],
                   color: props.color,
                   size: props.size,
                 });
